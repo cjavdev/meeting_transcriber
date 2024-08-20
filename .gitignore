@@ -1,0 +1,6 @@
+*.mp3
+*.wav
+*.m4a
+meeting_*.txt
+meeting_*.md
+.byebug_history
