@@ -14,7 +14,16 @@ class MeetingTranscriber
     parse_options
 
     api_key = ENV.fetch('OPENAI_API_KEY', nil)
-    @openai_client = OpenAI::Client.new(access_token: api_key, log_errors: true)
+    if api_key.nil?
+      @openai_client = OpenAI::Client.new(
+        uri_base: "http://localhost:11434",
+        log_errors: true,
+      )
+      @model = "llama3.1"
+    else
+      @openai_client = OpenAI::Client.new(access_token: api_key, log_errors: true)
+      @model = "gpt-4o-2024-08-06"
+    end
   end
 
   def parse_options
@@ -64,7 +73,7 @@ class MeetingTranscriber
   def transcribe_meeting(audio_file)
     puts "Transcribing meeting..."
     output, status = Open3.capture2e(
-      "/Users/cjavilla/repos/whisper.cpp/main",
+      "/Users/cjavilla/repos/whisper.cpp/whisper",
       "-m", "/Users/cjavilla/repos/whisper.cpp/models/ggml-large-v3.bin",
       "--diarize",
       "--output-txt",
@@ -84,7 +93,7 @@ class MeetingTranscriber
 
     response = @openai_client.chat(
       parameters: {
-        model: "gpt-4o-2024-08-06",
+        model: @model,
         messages: [
           { role: "system",
             content: "You are a helpful assistant that summarizes meeting transcripts and extracts high level takeaways and action items.", },
