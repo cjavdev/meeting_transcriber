@@ -2,7 +2,7 @@
 
 ### Requirements
 
-* Blackhole Virtual Audio Driver (combined output and aggregate device)
+* [Blackhole Virtual Audio Driver](https://github.com/ExistentialAudio/BlackHole) (combined output and aggregate device)
 * Whisper
 * ffmpeg
 * OpenAI API Key
